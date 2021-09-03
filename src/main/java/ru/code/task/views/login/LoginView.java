@@ -1,21 +1,9 @@
 package ru.code.task.views.login;
 
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
-import java.io.ByteArrayOutputStream;
-import com.vaadin.flow.component.upload.Upload;
-import java.util.Base64;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
-import com.vaadin.flow.component.textfield.TextField;
-import java.nio.charset.StandardCharsets;
-import org.springframework.web.util.UriUtils;
-import elemental.json.Json;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.Label;
 
 @PageTitle("Авторизация")
 @Route(value = "login")

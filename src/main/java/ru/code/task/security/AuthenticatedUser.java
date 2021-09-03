@@ -3,7 +3,7 @@ package ru.code.task.security;
 import java.util.Optional;
 
 import ru.code.task.data.entity.User;
-import ru.code.task.data.service.UserRepository;
+import ru.code.task.data.repository.UserRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 
