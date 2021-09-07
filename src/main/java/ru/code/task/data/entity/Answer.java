@@ -1,9 +1,8 @@
 package ru.code.task.data.entity;
 
-import ru.code.task.data.AbstractEntity;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 @Entity
@@ -13,12 +12,16 @@ public class Answer {
     private String id;
     private String value;
 
+    @ManyToOne
+    private Question question;
+
     public Answer() {
     }
 
-    public Answer(String value) {
+    public Answer(String value, Question question) {
         this.id = UUID.randomUUID().toString();
         this.value = value;
+        this.question = question;
     }
 
     public String getId() {
@@ -35,6 +38,14 @@ public class Answer {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     @Override

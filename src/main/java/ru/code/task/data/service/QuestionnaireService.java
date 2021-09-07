@@ -22,11 +22,15 @@ public class QuestionnaireService  extends CrudService<Questionnaire, String> {
         return questionnaireRepository;
     }
 
-    public List<Questionnaire> questionnaireList(){
+    public List<Questionnaire> findAll(){
         return questionnaireRepository.findAll();
     }
 
-    public List<Question> findListByIdQuestionnaire(String id){
-        return questionnaireRepository.findListByIdQuestionnaire(id);
+    public List<Question> findListQuestionsByIdQuestionnaire(String id){
+        return questionnaireRepository.findListQuestionsByIdQuestionnaire(id);
+    }
+
+    public Questionnaire findByIdQuestionnaire(String id){
+        return questionnaireRepository.findByIdQuestionnaire(id);
     }
 }

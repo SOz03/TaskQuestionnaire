@@ -60,7 +60,7 @@ public class QuestionnaireDesignerView extends Div {
     private List<Question> CONST_questions;
     private List<Question> questions;
     private List<Answer> CONST_answers;
-    private List<Answer> answers = new ArrayList<>();
+    private List<String> answersValue = new ArrayList<>();
     private boolean selected;
     private Questionnaire anketa;
 
@@ -145,40 +145,52 @@ public class QuestionnaireDesignerView extends Div {
 
             if (!nameQuestion.getValue().equals("")) {
                 if (isClear()) {
+                    if(anketa == null) anketa = new Questionnaire(nameQuestionnaire.getValue(), textArea.getValue(),questions.size());
                     selected = radioGroup.getValue().equals("Одиночный выбор");
-                    Question question = new Question(nameQuestion.getValue(), selected, answers);
+                    Question question = new Question(nameQuestion.getValue(), selected, anketa);
+                    for(String value: answersValue){
+                        Answer answer = new Answer(value,question);
+                        CONST_answers.add(answer);
+                    }
 
                     questions.add(question);
                     CONST_questions.add(question);
                     grid.setItems(questions);
 
-                    answers = new ArrayList<>();
+                    answersValue.clear();
                     clearTextField();
 
                     Notification.show("Вопрос добавлен в анкету.");
                 } else {
                     openMessage("Заполните 2 или более варианта ответа");
-                    answers.clear();
+                    answersValue.clear();
                 }
             } else {
                 openMessage("Заполните название вопроса");
             }
+
+
         });
 
         complete.addClickListener(event -> {
-            if(!nameQuestionnaire.getValue().equals("")){
-                if(questions.size() != 0){
-                    anketa = new Questionnaire(nameQuestionnaire.getValue(), textArea.getValue(), questions);
-                    if(updateDB()){
+            if (!nameQuestionnaire.getValue().equals("")) {
+                if (questions.size() != 0) {
+                    anketa.setDescription(textArea.getValue());
+                    anketa.setName(nameQuestionnaire.getValue());
+                    anketa.setSize(questions.size());
+                    if (updateDB()) {
                         nameQuestionnaire.setValue("");
                         clearTextField();
-                        answers.clear();
+                        answersValue.clear();
                         questions.clear();
                         textArea.clear();
                         grid.setItems(questions);
+                        anketa = new Questionnaire();
 
                         CONST_answers.clear();
                         CONST_questions.clear();
+
+                        Notification.show("Вы добавили новую анкету");
                     } else {
                         openMessage("Ошибка на сервере! БД не работает");
                     }
@@ -197,8 +209,9 @@ public class QuestionnaireDesignerView extends Div {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Вопрос - ").append(selectQuestion.getName()).append(":\n");
                 int count = 1;
-                List<Answer> listAnswer = selectQuestion.getListAnswer();
-                for (Answer answer: listAnswer){
+
+                for (Answer answer : CONST_answers) {
+                    if (answer.getQuestion()==selectQuestion){
                     sb.
                             append("  ").
                             append(count).
@@ -206,6 +219,7 @@ public class QuestionnaireDesignerView extends Div {
                             append(answer.getValue()).
                             append("\n");
                     count++;
+                    }
                 }
                 questionText.setValue(sb.toString());
             }
@@ -213,18 +227,18 @@ public class QuestionnaireDesignerView extends Div {
 
     }
 
-    private boolean updateDB(){
+    private boolean updateDB() {
         boolean value = false;
-        try{
-            for(Answer answer: CONST_answers){
-                answerService.update(answer);
-            }
-            for(Question question: CONST_questions){
+        try {
+            questionnaireService.update(anketa);
+            for (Question question : CONST_questions) {
                 questionService.update(question);
             }
-            questionnaireService.update(anketa);
+            for (Answer answer : CONST_answers) {
+                answerService.update(answer);
+            }
             value = true;
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
             System.err.println("ОШИБКА добавления сущностей в бд");
         }
@@ -239,15 +253,13 @@ public class QuestionnaireDesignerView extends Div {
 
     private int getCount(TextField textField) {
         if (!textField.getValue().equals("")) {
-            Answer answer = new Answer(textField.getValue());
-            answers.add(answer);
-            CONST_answers.add(answer);
+            answersValue.add(textField.getValue());
             return 1;
         }
         return 0;
     }
-    
-    private void clearTextField(){
+
+    private void clearTextField() {
         questionText.setValue("");
         nameQuestion.setValue("");
         answer1.clear();

@@ -10,5 +10,9 @@ import java.util.List;
 @Repository
 public interface QuestionnaireRepository extends JpaRepository<Questionnaire, String> {
     @Query("SELECT q.questions FROM Questionnaire q WHERE q.id = ?1")
-    List<Question> findListByIdQuestionnaire(String id);
+    List<Question> findListQuestionsByIdQuestionnaire(String id);
+
+    @Query("SELECT q FROM Questionnaire q WHERE q.id = ?1")
+    Questionnaire findByIdQuestionnaire(String id);
+
 }

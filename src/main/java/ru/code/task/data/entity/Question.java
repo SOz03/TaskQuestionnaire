@@ -12,17 +12,20 @@ public class Question{
     private String name;
     private boolean isOne;
 
-    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @ManyToOne
+    private Questionnaire questionnaire;
+
+    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "question")
     private List<Answer> listAnswer;
 
     public Question() {
     }
 
-    public Question(String name, boolean isOne, List<Answer> listAnswer) {
+    public Question(String name, boolean isOne, Questionnaire questionnaire) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.isOne = isOne;
-        this.listAnswer = listAnswer;
+        this.questionnaire = questionnaire;
     }
 
     public String getId() {
@@ -57,10 +60,26 @@ public class Question{
         this.listAnswer = listAnswer;
     }
 
-    @Override
-    public String toString() {
-        return "Вопрос '" +  name + "' с одиночным выбором - " + isOne +
-                ", списком ответов: " + listAnswer;
+    public boolean isOne() {
+        return isOne;
     }
 
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", isOne=" + isOne +
+                ", questionnaire=" + questionnaire +
+                ", listAnswer=" + listAnswer +
+                '}';
+    }
 }

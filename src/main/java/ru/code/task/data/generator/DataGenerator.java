@@ -60,40 +60,75 @@ public class DataGenerator {
             admin.setRoles(Collections.singleton(Role.ADMIN));
             userRepository.save(admin);
 
-            logger.info("... генерация 1-4 Answer сущности...");
-            String[] arrays = new String[]{"Немецкий", "Английский", "Китайский", "Другой"};
-            List<Answer> answers1 = new ArrayList<>();
-            Answer answer;
-            for (String array : arrays) {
-                answer = new Answer(array);
-                answers1.add(answer);
-            }
-            answerRepository.saveAll(answers1);
+            logger.info("... генерация 2 Questionnaire сущности...");
+            Questionnaire questionnaire = new Questionnaire("Иностранные языки",
+                    "Нам важно знать уровень владения языком.", 2);
+            questionnaireRepository.save(questionnaire);
 
-            logger.info("... генерация 5-6 Answer сущности...");
-            arrays = new String[]{"Плохо", "Нормально", "Хорошо", "Отлично"};
-            List<Answer> answers2 = new ArrayList<>();
-            for (String array : arrays) {
-                answer = new Answer(array);
-                answers2.add(answer);
-            }
-            answerRepository.saveAll(answers2);
+            Questionnaire questionnaire1 = new Questionnaire("Машины",
+                    "Анкета просто для теста.", 4);
+            questionnaireRepository.save(questionnaire1);
 
-            logger.info("... генерация 2 Question сущности...");
+            logger.info("... генерация 6 Question сущности...");
             Question question1 = new Question("Какими языками вы владеете?",
-                    false, answers1);
+                    false, questionnaire);
             Question question2 = new Question("Как хорошо вы разговариваете на английском языке?",
-                    true, answers2);
+                    true, questionnaire);
+            Question question3 = new Question("Сколько вы машин хотели бы иметь?",
+                    true, questionnaire1);
+            Question question4 = new Question("Какие вам нравятся?",
+                    false, questionnaire1);
+            Question question5 = new Question("Много ли вы делаете для этого?",
+                    true, questionnaire1);
+            Question question6 = new Question("Понравилась анкета?",
+                    true, questionnaire1);
             List<Question> questions = new ArrayList<>();
             questions.add(question1);
             questions.add(question2);
+            questions.add(question3);
+            questions.add(question4);
+            questions.add(question5);
+            questions.add(question6);
             questionRepository.saveAll(questions);
 
-            logger.info("... генерация 1 Questionnaire сущности...");
-            Questionnaire questionnaire = new Questionnaire("Иностранные языки",
-                    "Нам важно знать уровень владения языком.", questions);
-            questionnaireRepository.save(questionnaire);
+            logger.info("... генерация 1-4 Answer сущности...");
+            String[] arrays = new String[]{"Немецкий", "Английский", "Китайский", "Другой"};
+            List<Answer> answers = new ArrayList<>();
+            Answer answer;
+            for (String array : arrays) {
+                answer = new Answer(array, question1);
+                answers.add(answer);
+            }
 
+            logger.info("... генерация 5-8 Answer сущности...");
+            String[] arrays1 = new String[]{"Плохо", "Нормально", "Хорошо", "Отлично"};
+            for (String array : arrays1) {
+                answer = new Answer(array, question2);
+                answers.add(answer);
+            }
+
+            logger.info("... генерация  Answer сущности...");
+            String[] arrays2 = new String[]{"Одну", "Две", "Три", "МНОГО"};
+            for (String array : arrays2) {
+                answer = new Answer(array, question3);
+                answers.add(answer);
+            }
+            arrays2 = new String[]{"Mercedes", "BMW", "Lada", "Kia","Renault","Volkswagen"};
+            for (String array : arrays2) {
+                answer = new Answer(array, question4);
+                answers.add(answer);
+            }
+            arrays2 = new String[]{"Много", "Ничего", "Жду своего шанса"};
+            for (String array : arrays2) {
+                answer = new Answer(array, question5);
+                answers.add(answer);
+            }
+            arrays2 = new String[]{"Да", "Не особо", "Нет"};
+            for (String array : arrays2) {
+                answer = new Answer(array, question6);
+                answers.add(answer);
+            }
+            answerRepository.saveAll(answers);
             logger.info("Сгенерированы демонстрационные данные");
         };
     }

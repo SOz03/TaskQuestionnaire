@@ -15,18 +15,17 @@ public class Questionnaire {
     private String description;
     private long size;
 
-    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "questionnaire")
     private List<Question> questions;
 
     public Questionnaire() {
     }
 
-    public Questionnaire(String name, String description, List<Question> questions) {
+    public Questionnaire(String name, String description, long size) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
-        this.questions = questions;
-        this.size = questions.size();
+        this.size = size;
     }
 
     public String getId() {
