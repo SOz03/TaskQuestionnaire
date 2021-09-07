@@ -3,6 +3,10 @@
 .settings
 .project
 .classpath
+.npmrc
+pnpmfile.js
+tsconfig.json
+types.d.ts
 
 *.iml
 .DS_Store
